@@ -1,0 +1,28 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    name: chaos-site
+  namespace: chaos
+  name: chaos-deploy
+spec:
+  selector:
+    matchLabels:
+      name: chaos-site
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        name: chaos-site
+    spec:
+      containers:
+      - image: philipsmit/kubechaos-site:latest
+        imagePullPolicy: Always
+        name: chaos-site
+        ports:
+        - containerPort: 80

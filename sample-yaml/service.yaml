@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: chaos-site
+  name: chaos-svc
+  namespace: chaos
+spec:
+  ports:
+  - name: chaos-http
+    nodePort: 32080
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    name: chaos-site
+  type: NodePort
