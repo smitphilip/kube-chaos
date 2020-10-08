@@ -8,7 +8,8 @@ LOGFILE=/var/log/kubechaos.log
 DATETIME=$(date '+%d-%m-%Y %H:%M:%S')
 # === === === === === #
 
-kubectl get ns $CHAOS_SPACE 2>/dev/null
+
+kubectl get ns $CHAOS_SPACE &>/dev/null
 if [ $? -ne 0 ]; then
   echo "Failed. Namespace $CHAOS_SPACE not found"
   exit 7
@@ -48,6 +49,7 @@ function addNetpol {
     TMPFILE=.tmp_netpol.yml
     sed "s/\^namespace\^/$CHAOS_SPACE/g" templates/template-netpol.yml > $TMPFILE
 
+    kubectl apply -f $TMPFILE
     if [ $? -eq 0 ]; then
       echo "$DATETIME - NETPOL - Config Applied" >> $LOGFILE
     fi
@@ -70,3 +72,4 @@ RNDFUNC=$[$RANDOM % ${#FUNCTIONS[@]}]
 
 # call random function
 ${FUNCTIONS[$RNDFUNC]}
+
